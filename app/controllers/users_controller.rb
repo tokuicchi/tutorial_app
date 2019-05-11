@@ -1,10 +1,14 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update]
-  before_action :correct_user,   only: [:edit, :update]
+  before_action :logged_in_user, only: [:index, :edit, :update ]
+  before_action :correct_user,   only: [:edit, :update ]
   before_action :admin_user, only: [:destroy, :edit_basic_info, :update_basic_info ]
- 
+  before_action :general_user, only: [:index, :edit, :update, :show ]  #【勤怠B】追加機能〜一般ユーザーのアクセス制限〜
+
   def index
     @users = User.paginate(page: params[:page])
+    if params[:name].present?  #【勤怠B】No.9
+      @users = @users.get_by_name params[:name]
+    end
   end
   
   def show
@@ -99,5 +103,12 @@ class UsersController < ApplicationController
       redirect_to(root_url) unless current_user.admin?
     end
     
+    # 一般ユーザのアクセス制限
+    def general_user
+      unless current_user.admin?
+        @user = User.find(params[:id])
+          redirect_to(root_url) unless current_user?(@user)
+      end
+    end
     
 end

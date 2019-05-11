@@ -1,0 +1,14 @@
+ja: #【勤怠B】 No.3,4
+  activerecord:
+    models:
+      user: ユーザー 
+      attendance: 勤怠
+    attributes:
+        user:
+          id: ID
+          name: 名前 
+          email: メールアドレス
+          department: 所属
+          password: パスワード
+          password_confirmation: パスワード確認
+          updated_at: 更新日
