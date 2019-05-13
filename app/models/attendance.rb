@@ -17,12 +17,12 @@ class Attendance < ApplicationRecord
       end
     end
     
-  validate :edit_attendance_limit
-  def edit_attendance_limit
-    if self.worked_on > Date.today
-      errors[:worked_on] << "未来の勤怠は編集できません"
-    end
-  end
+  # validate :edit_attendance_limit  このvalidationで未来の勤怠を表示しなくなる
+  # def edit_attendance_limit
+  #   if self.worked_on > Date.today
+  #     errors[:worked_on] << "未来の勤怠は編集できません"
+  #   end
+  # end
   
   
 end
