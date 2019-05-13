@@ -1,5 +1,5 @@
 <% provide(:title, '一覧') %>
-<h1>ユーザー一覧</h1>
+<h1>基本情報の修正</h1>
 
 <!--【勤怠B】No.9-->
 <div class="user-search col-sm-4">
@@ -12,7 +12,15 @@
 <%= will_paginate @users, :previous_label => '&lt 前へ', :next_label => '次へ &gt' %>  <!--【勤怠B】No.5-->
 
 <ul class="users">
-  <%= render @users %>
+  <% @users.each do |user| %>
+    <li>
+      <%= link_to user.name , user %>
+      <% if current_user.admin? && !current_user?(user) %>
+        | <%= link_to "基本情報の編集", basic_info_path(user) %>
+      <% end %>
+    </li>
+  <% end %>
+
 </ul>
 
 <%= will_paginate @users, :previous_label => '&lt 前へ', :next_label => '次へ &gt' %>  <!--【勤怠B】No.5-->

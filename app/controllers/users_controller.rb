@@ -64,6 +64,14 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
   
+  # 【勤怠B】基本情報の編集専用画面
+  def index_edit_basic_info
+    @users = User.paginate(page: params[:page])
+      if params[:name].present?  
+        @users = @users.get_by_name params[:name]
+      end
+  end
+  
   def update_basic_info
     @user = User.find(params[:id])
     if @user.update_attributes(basic_info_params)
