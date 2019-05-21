@@ -1,12 +1,21 @@
 <% provide(:title, '一覧') %>
 <h1>ユーザー一覧</h1>
 
-<!--【勤怠B】No.9-->
-<div class="user-search col-sm-4">
-  <h4>ユーザー検索</h4>
-  <%= form_tag(users_path, method: :get) %>
-  <%= text_field_tag :name, params[:name], placeholder: "キーワードを入力…", class: 'form-control col-sm-2' %>
-  <%= submit_tag "検索", class: "btn btn-primary col-sm-2" %>
+<div class="head-form">
+  <!--CSVインポート-->
+  <div class="csv-import col-sm-4">
+    <%= form_tag(users_path, method: :get) %>
+    <%= file_field_tag :name  %>
+    <%= submit_tag "CSVをインポート", class: "btn btn-primary col-sm-6" %><br><br>
+  </div>
+  
+  <!--【勤怠B】No.9　検索-->
+  <div class="user-search col-sm-4">
+    <h4>ユーザー検索</h4>
+    <%= form_tag(users_path, method: :get) %>
+    <%= text_field_tag :name, params[:name], placeholder: "キーワードを入力…", class: 'form-control col-sm-2' %>
+    <%= submit_tag "検索", class: "btn btn-primary col-sm-2" %>
+  </div>
 </div>
 
 <%= will_paginate @users, :previous_label => '&lt 前へ', :next_label => '次へ &gt' %>  <!--【勤怠B】No.5-->

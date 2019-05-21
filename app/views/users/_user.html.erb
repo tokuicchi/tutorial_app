@@ -1,6 +1,60 @@
 <li>
-  <%= link_to user.name , user %>
-  <% if current_user.admin? %>
-    |  <%= link_to "削除", user, method: :delete, data: {confirm: "削除してよろしいですか？"} %>
-  <% end %>
+  <section>
+    
+  <%= user.name %><br>
+    <% if current_user.admin? %>
+      <% unless user.admin %> <!--管理者の削除は不要-->
+        <%= link_to "削除", user, method: :delete, class: "btn btn-primary", data: {confirm: "削除してよろしいですか？"} %>
+      <% end %>
+    <div class="panel-group">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#edit<%= user.id %>">編集</button>
+        </div>
+        <div id="edit<%= user.id %>" class="collapse panel-collapse">
+          <div class="panel-body ">
+            <h3>アカウント情報の更新</h3>
+            <%= form_for(user) do |f| %>    <!--url: update_users_info_path(params: {id: user.id}) を足したいけどエラーになる-->
+            <!--名前のフォーム-->      
+              <%= f.label :name %>
+              <%= f.text_field :name, class: 'form-control' %>
+            <!--メールのフォーム--> 
+              <%= f.label :email %>
+              <%= f.email_field :email, class: 'form-control' %>
+            <!--部署のフォーム--> 
+              <%= f.label :department %>
+              <%= f.text_field :department, class: 'form-control' %>
+            <!--社員番号のフォーム--> 
+              <%= f.label :employee_number %>
+              <%= f.text_field :employee_number, class: 'form-control' %>
+            <!--カード番号のフォーム--> 
+              <%= f.label :uid %>
+              <%= f.text_field :uid, class: 'form-control' %>
+              
+              <% unless user.admin %> <!--【基本情報】管理者以外のフォーム--> 
+                <!--基本時間のフォーム--> 
+                  <%= f.label :basic_time %>
+                  <%= f.time_field :basic_time, class: 'form-control' %>
+                <!--指定勤務開始時間のフォーム--> 
+                  <%= f.label :work_time %>
+                  <%= f.time_field :work_time, class: 'form-control' %>
+                <!--指定勤務終了時間のフォーム--> 
+                  <%= f.label :finish_work_time %>
+                  <%= f.time_field :finish_work_time, class: 'form-control' %>  
+              <% end %>
+              
+            <!--パスワードのフォーム--> 
+              <%= f.label :password %>
+              <%= f.password_field :password, class: 'form-control' %>
+            <!--パスワード確認のフォーム--> 
+              <%= f.label :password_confirmation %>
+              <%= f.password_field :password_confirmation, class: 'form-control' %>  
+              <%= f.submit "更新", class: "btn btn-primary" %>
+            <% end %>
+          </div><!--panel-body終わり--> 
+        </div><!--collapse panel-collapse-->
+      </div><!--panel panel-default終わり--> 
+    </div><!--panel-group終わり--> 
+  <% end %>  
+  </section>
 </li>

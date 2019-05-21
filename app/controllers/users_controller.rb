@@ -50,13 +50,18 @@ class UsersController < ApplicationController
       flash[:success] = "ユーザー情報を更新しました。"
       redirect_to @user
     else
-      render 'edit'
+      render 'new'
     end
+  end
+  
+  # ユーザー一覧のモーダルから編集
+  def update_users_info
+    
   end
   
   def destroy
     User.find(params[:id]).destroy
-    flash[:succues] = "削除しました"
+    flash[:success] = "削除しました"
     redirect_to users_url
   end
   
@@ -82,6 +87,12 @@ class UsersController < ApplicationController
     end
   end
   
+  # 出勤中社員一覧
+  def duty
+    @users = User.all
+  end
+  
+  
   private
   
     def user_params
@@ -90,6 +101,10 @@ class UsersController < ApplicationController
     
     def basic_info_params
       params.require(:user).permit(:basic_time, :work_time)
+    end
+    
+    def users_all_info_params
+      params.require(:user).permit(:name, :email, :department, :employee_number, :uid, :basic_time, :work_time, :finish_work_time, :password, :password_confirmation)
     end
   
     # ログイン済みか確認
