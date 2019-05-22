@@ -1,8 +1,97 @@
 <% provide(:title, '拠点一覧') %>
 <h1>拠点一覧</h1>
 
-<a type="button" class="btn btn-primary" data-toggle="modal" 
-  data-target="#sampleModal">拠点情報追加</a>
+  <div>
+    <table class="table-bordered table-striped table-condensed">
+      <tr>
+        <th></th>
+        <th></th>
+        <th>拠点番号</th>
+        <th>拠点名</th>
+        <th>勤怠種類</th>
+      </tr>
+      
+      <% @bases.each do |base| %>    
+      <tr>
+        <td> <!--編集モーダル-->
+          <button class="btn btn-primary" data-toggle="modal"
+            data-target="#editModal"
+            data-base_number="<%= base.base_number %>"
+            data-base_name="<%= base.base_name %>"
+            data-attendance_type="<%= base.attendance_type %>">修正
+          </button>
+          
+          <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="Modal" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+          　　　<!--モーダルを閉じる×ボタンを作る-->
+                  <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+          　　　　<!--モーダルのタイトル-->
+                  <h4 class="modal-title" id="Modal">拠点編集</h4>
+                 </div>  <!--modal-header終わり-->
+                 <div class="modal-body">
+                   <%= form_for(base, url: basis_path(base), method: :patch) do |f| %>
+                   <!--拠点番号-->
+                     <%= f.label :base_number %>
+                     <%= f.number_field :base_number, class: 'form-control modal-base_number' %>
+                   <!--拠点名-->
+                     <%= f.label :base_name %>
+                     <%= f.text_field :base_name, class: 'form-control modal-base_name' %>
+                   <!--勤怠種類-->
+                     <%= f.label :attendance_type %>
+                     <%= f.text_field :attendance_type, class: 'form-control modal-attendance_type' %>
+                     <%= f.submit "登録する", class: "btn btn-primary" %>
+                   <% end %>
+                 </div>  <!--modal-body終わり-->
+                 <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button><!--モーダルを閉じるボタン-->
+                 </div>  <!--modal-footer終わり-->
+              </div>
+            </div>
+          </div>  
+
+          <script>
+          // ボタンがクリックされてモーダルが開いたら作動
+          $('#editModal').on('show.bs.modal', function (event) { 
+          // クリックされたbuttonを取得
+          var button = $(event.relatedTarget); 
+          // 上記の中の、base_number,name,type の値を取得
+          var base_number = button.data('base_number'); 
+          var base_name = button.data('base_name');
+          var attendance_type = button.data('attendance_type');
+          
+          // クリックされているsampleModal要素を取得
+          var modal = $(this); 
+                        
+          // sampleModalの中のmodal-date,modal-weekという要素を取得し、そこにdata-dateの値を入れる。これでクリックした日付の日付がモーダル内に入る
+          modal.find('.modal-base_number').val(base_number);
+          modal.find('.modal-base_name').val(base_name);
+          modal.find('.modal-attendance_type').val(attendance_type);
+          });
+          </script>       
+
+        </td>
+        <td><%= link_to "削除", basis_path(base), method: :delete, class: "btn btn-primary", data: {confirm: "削除してよろしいですか？"} %></td>
+        <td><%= base.base_number %></td>
+        <td><%= base.base_name %></td>
+        <td><%= base.attendance_type %></td>
+      </tr>
+      <% end %>
+
+    </table><br>
+  </div>
+  
+
+<!--baseは使えないので注意-->
+<button type="button" class="btn btn-primary" data-toggle="modal" 
+  data-target="#sampleModal"
+  data-base_number="<%= @base.base_number %>"
+  data-base_name="<%= @base.base_name %>"
+  data-attendance_type="<%= @base.attendance_type %>">拠点情報追加
+</button>
 
 
 <div class="modal fade" id="sampleModal" tabindex="-1" role="dialog" aria-labelledby="Modal" aria-hidden="true">
@@ -17,46 +106,45 @@
         <h4 class="modal-title" id="Modal">拠点登録</h4>
        </div>  <!--modal-header終わり-->
        <div class="modal-body">
-         <%= form_for @base do |f| %>
-         <!--拠点番号のフォーム-->
+         <%= form_for(@base, url: bases_path) do |f| %>
+         <!--拠点番号-->
            <%= f.label :base_number %>
-           <%= f.text_field :base_number, class: 'form-control' %>
-         <!--拠点名のフォーム-->
-           <%= f.label :name %>
-           <%= f.text_field :name, class: 'form-control' %>
-         <!--勤怠種類のフォーム-->
-           <%= f.label :type %>
-           <%= f.text_field :type, class: 'form-control' %>           
-           
-           <%= f.submit "作成する", class: 'form-control' %>
+           <%= f.number_field :base_number, class: 'form-control modal-base_number' %>
+         <!--拠点名-->
+           <%= f.label :base_name %>
+           <%= f.text_field :base_name, class: 'form-control modal-base_name' %>
+         <!--勤怠種類-->
+           <%= f.label :attendance_type %>
+           <%= f.text_field :attendance_type, class: 'form-control modal-attendance_type' %>
+           <%= f.submit "登録する", class: "btn btn-primary" %>
          <% end %>
        </div>  <!--modal-body終わり-->
 
        <div class="modal-footer">
-         <!--モーダルを閉じるボタン-->
-         <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button><!--モーダルを閉じるボタン-->
        </div>  <!--modal-footer終わり-->
        
     </div>
   </div>
 </div>  
-          
+
+        
   <script>
   // ボタンがクリックされてモーダルが開いたら作動
   $('#sampleModal').on('show.bs.modal', function (event) { 
   // クリックされたbuttonを取得
   var button = $(event.relatedTarget); 
-  // 上記の中の、data-date, data-week の値を取得
+  // 上記の中の、base_number,name,type の値を取得
   var base_number = button.data('base_number'); 
-  var name = button.data('name');
-  var type = button.data('type');
+  var base_name = button.data('base_name');
+  var attendance_type = button.data('attendance_type');
   
   // クリックされているsampleModal要素を取得
   var modal = $(this); 
                 
   // sampleModalの中のmodal-date,modal-weekという要素を取得し、そこにdata-dateの値を入れる。これでクリックした日付の日付がモーダル内に入る
-  modal.find('.modal-base_number').text(base_number);
-  modal.find('.modal-name').text(name);
-  modal.find('.modal-type').text(type);
+  modal.find('.modal-base_number').val(base_number);
+  modal.find('.modal-base_name').val(base_name);
+  modal.find('.modal-attendance_type').val(attendance_type);
   });
   </script>            

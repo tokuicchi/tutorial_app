@@ -55,8 +55,13 @@ class UsersController < ApplicationController
   end
   
   # ユーザー一覧のモーダルから編集
-  def update_users_info
-    
+  def update_user_info
+    @user = User.find(params[:id])
+    # if @user.update_attributes(users_all_info_params)
+    if @user.update_attributes(user_params)
+      flash[:success] = "ユーザー情報を更新"
+      redirect_to users_url
+    end
   end
   
   def destroy
@@ -97,10 +102,11 @@ class UsersController < ApplicationController
   
     def user_params
       params.require(:user).permit(:name, :email, :department, :password, :password_confirmation)
+      # params.require(:user).permit(:name, :email, :department, :employee_number, :uid, :basic_time, :work_time, :finish_work_time, :password, :password_confirmation)
     end
     
     def basic_info_params
-      params.require(:user).permit(:basic_time, :work_time)
+      params.require(:user).permit(:basic_time, :work_time, :finished_at)
     end
     
     def users_all_info_params
